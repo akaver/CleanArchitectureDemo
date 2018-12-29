@@ -22,7 +22,7 @@ namespace WebApp
     public class Startup
     {
         private static readonly string InMemoryDbName = Guid.NewGuid().ToString();
-        
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -40,18 +40,29 @@ namespace WebApp
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            //services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(InMemoryDbName));
+            
+            
+            
+            #region EF based dal
 
+            //services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(InMemoryDbName));
             //services.AddScoped<IDataContext, AppDbContext>();
             //services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
-            
+
+            #endregion
+
+            #region JSON based dal
+
             services.Configure<AppJSONContextOptions>(options =>
             {
                 options.DataPath = "/Users/Akaver/Magister/TarkvaraArhitektuur/CleanArchitectureDemo/Data/";
             });
-            
             services.AddScoped<IDataContext, AppJSONContext>();
             services.AddScoped<IAppUnitOfWork, AppJSONUnitOfWork>();
+
+            #endregion
+
+            
             
             services.AddScoped<IAppBLL, AppBLL>();
 
@@ -83,7 +94,7 @@ namespace WebApp
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            // seed the data
+            // seed the data, if EF database is available
             using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 scope.ServiceProvider.GetService<AppDbContext>()?.Database.EnsureCreated();
