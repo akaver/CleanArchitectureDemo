@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Domain.Core;
+using Newtonsoft.Json;
 
 namespace Domain
 {
@@ -19,9 +20,11 @@ namespace Domain
 
 
         public int PersonId { get; set; }
+        [JsonIgnore]
         public Person Person { get; set; }
 
         public int ContactTypeId { get; set; }
+        [JsonIgnore]
         public ContactType ContactType { get; set; }
     }
 }

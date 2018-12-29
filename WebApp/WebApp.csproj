@@ -18,6 +18,7 @@
       <ProjectReference Include="..\BLL.App\BLL.App.csproj" />
       <ProjectReference Include="..\BLL\BLL.csproj" />
       <ProjectReference Include="..\DAL.EF\DAL.EF.csproj" />
+      <ProjectReference Include="..\DAL.JSON\DAL.JSON.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Domain.Core;
+using Newtonsoft.Json;
 
 namespace Domain
 {
@@ -18,7 +19,7 @@ namespace Domain
             set => _value = value?.Trim();
         }
 
-
+        [JsonIgnore]
         public virtual ICollection<Contact> Contacts { get; set; }
     }
 }

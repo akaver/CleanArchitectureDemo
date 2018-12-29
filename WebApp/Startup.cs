@@ -7,6 +7,7 @@ using BLL.App;
 using DAL;
 using DAL.Core;
 using DAL.EF;
+using DAL.JSON;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -39,10 +40,14 @@ namespace WebApp
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(InMemoryDbName));
+            //services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(InMemoryDbName));
 
-            services.AddScoped<IDataContext, AppDbContext>();
-            services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
+            //services.AddScoped<IDataContext, AppDbContext>();
+            //services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
+            
+            services.AddScoped<IDataContext, AppJSONContext>();
+            services.AddScoped<IAppUnitOfWork, AppJSONUnitOfWork>();
+            
             services.AddScoped<IAppBLL, AppBLL>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -76,7 +81,7 @@ namespace WebApp
             // seed the data
             using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                scope.ServiceProvider.GetService<AppDbContext>().Database.EnsureCreated();
+                scope.ServiceProvider.GetService<AppDbContext>()?.Database.EnsureCreated();
             }
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Domain.Core;
+using Newtonsoft.Json;
 
 namespace Domain
 {
@@ -32,10 +33,12 @@ namespace Domain
             set => _lastName = value?.Trim();
         }
 
-
+        [JsonIgnore]
         public virtual ICollection<Contact> Contacts { get; set; }
 
+        [JsonIgnore]
         public virtual string FirstLastName => (FirstName + " " + LastName).Trim();
+        [JsonIgnore]
         public virtual string LastFirstName => (LastName + " " + FirstName).Trim();
     }
 }
