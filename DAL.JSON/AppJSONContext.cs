@@ -8,6 +8,7 @@ using DAL.JSON.Repositories;
 using DAL.Repositories;
 using Domain;
 using Domain.Core;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -16,17 +17,29 @@ namespace DAL.JSON
     public class AppJSONContext : IDataContext
     {
         private readonly Dictionary<Type, object> _dataCache = new Dictionary<Type, object>();
-        private readonly string _dataPath = "/Users/Akaver/Magister/TarkvaraArhitektuur/CleanArchitectureDemo/Data/";
+        private readonly string _dataPath;
 
-        public AppJSONContext()
+        public AppJSONContext(IOptionsMonitor<AppJSONContextOptions> options)
         {
+            _dataPath = options.CurrentValue.DataPath;
+
             LoadData<Person>();
             LoadData<Contact>();
             LoadData<ContactType>();
 
+
+            // Restore relationships
             foreach (var contact in DataSet<Contact>())
             {
-                
+                var person = DataSet<Person>().First(a => a.Id == contact.PersonId);
+                if (person.Contacts == null) person.Contacts = new List<Contact>();
+                person.Contacts.Add(contact);
+                contact.Person = person;
+
+                var contactType = DataSet<ContactType>().First(a => a.Id == contact.ContactTypeId);
+                if (contactType.Contacts == null) contactType.Contacts = new List<Contact>();
+                contactType.Contacts.Add(contact);
+                contact.ContactType = contactType;
             }
         }
 
@@ -44,11 +57,7 @@ namespace DAL.JSON
                 _dataCache[typeof(TEntity)] = new List<TEntity>();
             }
 
-
-            var res = (List<TEntity>) _dataCache[typeof(TEntity)];
-
-            return res;
-
+           return (List<TEntity>) _dataCache[typeof(TEntity)];
         }
 
 
@@ -59,11 +68,10 @@ namespace DAL.JSON
             {
                 var jsonText = JsonConvert.SerializeObject(_dataCache[key]);
                 res += jsonText.Length;
-                File.WriteAllText(_dataPath+ key.Name+".json",
+                File.WriteAllText(_dataPath + key.Name + ".json",
                     jsonText);
-                
             }
-            
+
             return res;
         }
 

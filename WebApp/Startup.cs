@@ -45,6 +45,11 @@ namespace WebApp
             //services.AddScoped<IDataContext, AppDbContext>();
             //services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
             
+            services.Configure<AppJSONContextOptions>(options =>
+            {
+                options.DataPath = "/Users/Akaver/Magister/TarkvaraArhitektuur/CleanArchitectureDemo/Data/";
+            });
+            
             services.AddScoped<IDataContext, AppJSONContext>();
             services.AddScoped<IAppUnitOfWork, AppJSONUnitOfWork>();
             
