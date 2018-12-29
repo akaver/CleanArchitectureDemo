@@ -20,6 +20,8 @@ namespace WebApp
 {
     public class Startup
     {
+        private static readonly string InMemoryDbName = Guid.NewGuid().ToString();
+        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -37,12 +39,11 @@ namespace WebApp
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(Guid.NewGuid().ToString()));
+            services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(InMemoryDbName));
 
             services.AddScoped<IDataContext, AppDbContext>();
             services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
             services.AddScoped<IAppBLL, AppBLL>();
-
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

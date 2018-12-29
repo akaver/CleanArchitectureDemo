@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Domain.Core;
 
 namespace Domain
@@ -6,6 +7,9 @@ namespace Domain
     {
         private string _value;
 
+        [MinLength(1)]
+        [MaxLength(64)]
+        [Required]
         public string Value
         {
             get => _value;

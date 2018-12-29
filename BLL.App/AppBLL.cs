@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using BLL.App.Services;
 using BLL.Services;
 using DAL;
@@ -21,8 +22,10 @@ namespace BLL.App
 
         public IPersonService Persons => GetOrCreateService<IPersonService>((uow) => new PersonService(uow));
         public IContactService Contacts => GetOrCreateService<IContactService>((uow) => new ContactService(uow));
-        public IContactTypeService ContactTypes => GetOrCreateService<IContactTypeService>((uow) => new ContactTypeService(uow));
-        
+
+        public IContactTypeService ContactTypes =>
+            GetOrCreateService<IContactTypeService>((uow) => new ContactTypeService(uow));
+
         private TService GetOrCreateService<TService>(Func<IAppUnitOfWork, object> factoryMethod)
         {
             _serviceCache.TryGetValue(key: typeof(TService), value: out var serviceObj);
@@ -36,6 +39,9 @@ namespace BLL.App
 
             return (TService) serviceObj;
         }
-        
+
+        public int SaveChanges() => _uow.SaveChanges();
+
+        public async Task<int> SaveChangesAsync() => await _uow.SaveChangesAsync();
     }
 }

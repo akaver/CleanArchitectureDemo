@@ -20,6 +20,9 @@ namespace Domain
             set => _firstName = value?.Trim();
         }
 
+        [MinLength(1)]
+        [MaxLength(64)]
+        [Required]
         public virtual string LastName
         {
             get => _lastName;
