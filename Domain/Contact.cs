@@ -10,6 +10,7 @@ namespace Domain
         [MinLength(1)]
         [MaxLength(64)]
         [Required]
+        [Display(Name = "Contact")]
         public string Value
         {
             get => _value;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Domain.Core;
 
@@ -14,6 +15,7 @@ namespace Domain
         [MinLength(1)]
         [MaxLength(64)]
         [Required]
+        [Display(Name = "First Name")]
         public virtual string FirstName
         {
             get => _firstName;
@@ -23,6 +25,7 @@ namespace Domain
         [MinLength(1)]
         [MaxLength(64)]
         [Required]
+        [Display(Name = "Last Name")]
         public virtual string LastName
         {
             get => _lastName;
