@@ -28,6 +28,9 @@ namespace DAL.EF.Repositories
         public override Contact Find(params object[] id)
         {
             var entity = base.Find(id);
+            if (entity == null)
+                return null;
+            
             RepositoryDbContext.Entry(entity).Reference(a => a.Person).Load();
             RepositoryDbContext.Entry(entity).Reference(a => a.ContactType).Load();
             return entity;
@@ -36,6 +39,9 @@ namespace DAL.EF.Repositories
         public override async Task<Contact> FindAsync(params object[] id)
         {
             var entity = await base.FindAsync(id);
+            if (entity == null)
+                return null;
+            
             RepositoryDbContext.Entry(entity).Reference(a => a.Person).Load();
             RepositoryDbContext.Entry(entity).Reference(a => a.ContactType).Load();
             return entity;
